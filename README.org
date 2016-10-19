@@ -1,49 +1,22 @@
-* SQLsmith
-
-: <mba> "I love the smell of coredumps in the morning"
+* SQLsmith for MonetDB
+    added SQLsmith Driver for MonetDB
 
 ** Description
 SQLsmith is a random SQL query generator.  Its paragon is [[https://embed.cs.utah.edu/csmith/][Csmith]],
-which proved valuable for quality assurance in C compilers.
-
-It currently supports generating queries for PostgreSQL 9.5 or later
-only.  SQLsmith was designed with testing different versions and even
-products in mind, but this has not manifested yet.
-
-Besides PostgreSQL developers, users developing extensions of
-PostgreSQL might also be interested in exposing their code to
-SQLsmith's random workload.
-
-During its prototyping stage, it already found about thirty bugs in
-PostgreSQL alphas, betas and releases, including security
-vulnerabilities in released versions.  SQLsmith's score list is
-maintained by its users in a wiki:
-
-    https://github.com/anse1/sqlsmith/wiki#score-list
 
 ** Dependencies:
 - C++11
-- libpqxx
+- libpqxx // for postgresql
 - boost::regex in case your std::regex is broken
+- monetdb_mapi // for monetdb
 
-** Building on Debian Jessie
+** Building on Fedora
 
 : apt-get install build-essential autoconf autoconf-archive libpqxx-dev libboost-regex-dev
 : cd sqlsmith
-: autoreconf -i # Not needed when building from a release tarball
+: autoreconf -i 
 : ./configure
 : make
-
-** Building on OSX
-
-In order to build on Mac OSX, assuming you use Homebrew, run the following
-
-: brew install libpqxx automake libtool autoconf autoconf-archive
-: cd sqlsmith
-: autoreconf -i # Not needed when building from a release tarball
-: ./configure
-: make
-
 ** Usage
 
 SQLsmith connects to the target database to retrieve the schema for
@@ -55,11 +28,12 @@ for its connection to avoid this.
 
 Example invocation:
 
-: sqlsmith --verbose --target="host=/tmp port=65432 dbname=regression"
+: sqlsmith --verbose --monetdb="databasename"
 
 The following options are currently supported:
 
 | =--target=connstr=   | target database (default: libpq defaults)        |
+| =--monetdb=dbname=   | target database                                  |
 | =--log-to=connstr=   | database for logging errors (default: don't log) |
 | =--verbose=          | emit progress output                             |
 | =--version=          | show version information                         |
@@ -85,48 +59,6 @@ following ones are generated:
 It also periodically emits error reports.  In the following example,
 these are mostly caused by the primitive type system.
 
-: queries: 39000 (202.399 gen/s, 298.942 exec/s)
-: AST stats (avg): height = 5.599 nodes = 37.8489
-: 82	ERROR:  invalid regular expression: quantifier operand invalid
-: 70	ERROR:  canceling statement due to statement timeout
-: 44	ERROR:  operator does not exist: point = point
-: 27	ERROR:  operator does not exist: xml = xml
-: 22	ERROR:  cannot compare arrays of different element types
-: 11	ERROR:  could not determine which collation to use for string comparison
-: 5	ERROR:  invalid regular expression: nfa has too many states
-: 4	ERROR:  cache lookup failed for index 2619
-: 4	ERROR:  invalid regular expression: brackets [] not balanced
-: 3	ERROR:  operator does not exist: polygon = polygon
-: 2	ERROR:  invalid regular expression: parentheses () not balanced
-: 1	ERROR:  invalid regular expression: invalid character range
-: error rate: 0.00705128
-
-The only one that looks interesting here is the cache lookup one.
-Taking a closer look at it reveals that it happens when you query a
-certain catalog view like this:
-
-: self=# select indexdef from pg_catalog.pg_indexes where indexdef is not NULL;
-: FEHLER:  cache lookup failed for index 2619
-
-This is because the planner then puts =pg_get_indexdef(oid)= in a
-context where it sees non-index-oids, which causes it to croak:
-
-:                                      QUERY PLAN                                     
-: ------------------------------------------------------------------------------------
-:  Hash Join  (cost=17.60..30.65 rows=9 width=4)
-:    Hash Cond: (i.oid = x.indexrelid)
-:    ->  Seq Scan on pg_class i  (cost=0.00..12.52 rows=114 width=8)
-:          Filter: ((pg_get_indexdef(oid) IS NOT NULL) AND (relkind = 'i'::"char"))
-:    ->  Hash  (cost=17.31..17.31 rows=23 width=4)
-:          ->  Hash Join  (cost=12.52..17.31 rows=23 width=4)
-:                Hash Cond: (x.indrelid = c.oid)
-:                ->  Seq Scan on pg_index x  (cost=0.00..4.13 rows=113 width=8)
-:                ->  Hash  (cost=11.76..11.76 rows=61 width=8)
-:                      ->  Seq Scan on pg_class c  (cost=0.00..11.76 rows=61 width=8)
-:                            Filter: (relkind = ANY ('{r,m}'::"char"[]))
-
-Now this is more of a curiosity than a bug, but still illustrating how
-debugging with the help of SQLsmith might look like.
 
 ** License
 
@@ -134,8 +66,11 @@ SQLsmith is available under GPLv3.  Use it at your own risk.  It may
 *damage your database* (one of the purposes of this tool /is/ to try
 and break things).  See the file [[COPYING]] for details.
 
-** Authors
+** Authors for SQLsmith
 
 Andreas Seltenreich <seltenreich@gmx.de>
 
-[[ast.png]]
+** Authors for SQLsmith driver for MonetDB
+
+Bo Tang <tangloner@gmail.com>
+Stefan Manegold <Stefan.Manegold@cwi.nl>
