@@ -72,5 +72,4 @@ Andreas Seltenreich <seltenreich@gmx.de>
 
 ** Authors for SQLsmith driver for MonetDB
 
-Bo Tang <tangloner@gmail.com>
-Stefan Manegold <Stefan.Manegold@cwi.nl>
+Bo Tang; Stefan Manegold
