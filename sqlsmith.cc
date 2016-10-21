@@ -201,7 +201,7 @@ int main(int argc, char *argv[])
 	    gen->out(s);
 	
 	    //std::cout << "Query: " << s.str() << std::endl << std::endl << std::endl;
-	    qrylog << s.str() << ";" << std::endl;
+	    //qrylog << s.str() << ";" << std::endl;
 
 
 	    /* Try to execute it */
@@ -209,6 +209,7 @@ int main(int argc, char *argv[])
 	      dut->test(s.str());
 	      for (auto l : loggers)
 		l->executed(*gen);
+		qrylog << s.str() << ";" << std::endl;
 	    } catch (const dut::failure &e) {
 	      for (auto l : loggers)
 		try {
