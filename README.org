@@ -32,9 +32,9 @@ Example invocation:
 
 The following options are currently supported:
 
-| =--target=connstr=   | target database (default: libpq defaults)        |
-| =--monetdb=dbname=   | target database                                  |
-| =--log-to=connstr=   | database for logging errors (default: don't log) |
+| =--target=connstr=   | target postgresql database                       |
+| =--monetdb=dbname=   | target monetdb database                          |
+| =--log-to=connstr=   | database for logging errors (for postgresql only)|
 | =--verbose=          | emit progress output                             |
 | =--version=          | show version information                         |
 | =--seed=int=         | seed RNG with specified integer instead of PID   |
