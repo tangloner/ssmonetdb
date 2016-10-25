@@ -2,7 +2,8 @@
     added SQLsmith Driver for MonetDB
 
 ** Description
-SQLsmith is a random SQL query generator.  Its paragon is [[https://embed.cs.utah.edu/csmith/][Csmith]],
+SQLsmith is a random SQL query generator.
+
 
 ** Dependencies:
 - C++11
