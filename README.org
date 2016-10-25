@@ -12,8 +12,7 @@ SQLsmith is a random SQL query generator.  Its paragon is [[https://embed.cs.uta
 
 ** Building on Fedora
 
-: apt-get install build-essential autoconf autoconf-archive libpqxx-dev libboost-regex-dev
-: cd sqlsmith
+: cd ssmonetdb
 : autoreconf -i 
 : ./configure
 : make
@@ -72,4 +71,6 @@ Andreas Seltenreich <seltenreich@gmx.de>
 
 ** Authors for SQLsmith driver for MonetDB
 
-Bo Tang; Stefan Manegold
+Bo Tang
+
+Stefan Manegold
