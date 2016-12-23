@@ -20,9 +20,12 @@ SQLsmith is a random SQL query generator.
 : ./configure
 : make
 
+
 ** Misc on x64 Ubuntu
-: if meet error: "Could not find a version of the Boost::Regex library!" using the following command
+: For error: "Could not find a version of the Boost::Regex library!" using the following command
 : ./configure --with-boost-libdir=/usr/lib/x86_64-linux-gnu
+: For error: No package 'monetdb-mapi' found or No package 'LIBPQXX' found  
+: adjusting the PKG_CONFIG_PATH environment variable
 
 ** Usage
 
