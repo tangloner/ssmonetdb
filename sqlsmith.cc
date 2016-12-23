@@ -208,8 +208,10 @@ int main(int argc, char *argv[])
 	    try {
 	      dut->test(s.str());
 	      for (auto l : loggers)
-		l->executed(*gen);
-		qrylog << s.str() << ";" << std::endl;
+		  {	
+			l->executed(*gen);
+		  }
+		  qrylog << s.str() << ";" << std::endl;
 	    } catch (const dut::failure &e) {
 	      for (auto l : loggers)
 		try {
