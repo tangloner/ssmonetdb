@@ -8,7 +8,7 @@
 #include "dut.hh"
 #include "relmodel.hh"
 #include "schema.hh"
-
+#include <string.h>
 
 #include <mapi.h>
 
