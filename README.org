@@ -22,7 +22,8 @@ SQLsmith is a random SQL query generator.
 ** Usage
 
 
-** Misc on x64 Ubuntu, if meet error: "Could not find a version of the Boost::Regex library!"
+** Misc on x64 Ubuntu
+: if meet error: "Could not find a version of the Boost::Regex library!" using the following command
 : ./configure --with-boost-libdir=/usr/lib/x86_64-linux-gnu
 
 SQLsmith connects to the target database to retrieve the schema for
