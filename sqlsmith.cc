@@ -178,6 +178,8 @@ int main(int argc, char *argv[])
 	dut = make_shared<dut_pqxx>(options["target"]);
 
       std::ofstream qrylog("ssquery.log");
+	  std::ofstream allqueries("allqueries.log");
+
       while (1)
       {
 	try {
@@ -201,7 +203,7 @@ int main(int argc, char *argv[])
 	    gen->out(s);
 	
 	    //std::cout << "Query: " << s.str() << std::endl << std::endl << std::endl;
-	    //qrylog << s.str() << ";" << std::endl;
+	    allqueries << s.str() << ";" << std::endl;
 
 
 	    /* Try to execute it */
@@ -233,6 +235,7 @@ int main(int argc, char *argv[])
 	}
       }
       qrylog.close();
+	  allqueries.close();
     }
     catch (const exception &e) {
 	cerr << e.what() << endl;
