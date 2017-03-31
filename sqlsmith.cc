@@ -208,11 +208,16 @@ int main(int argc, char *argv[])
 
 	    /* Try to execute it */
 	    try {
+          std::ofstream qrycur("ssquery.current");
+          qrycur << s.str() << ";" << std::endl;
+          qrycur.close();
+          clock_t starttime = clock();
 	      dut->test(s.str());
 	      for (auto l : loggers)
 		  {	
 			l->executed(*gen);
 		  }
+          qrylog<< "-- TIMING " << ((double)clock() - starttime) / (double) CLOCKS_PER_SEC << " seconds "<<std::endl;
 		  qrylog << s.str() << ";" << std::endl;
 	    } catch (const dut::failure &e) {
 	      for (auto l : loggers)

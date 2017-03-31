@@ -221,16 +221,19 @@ void dut_monetdb::test(const std::string &stmt)
 		try{
 			if(mapi_error(dbh)==MERROR)
 			{
-			    mapi_explain_result(hdl, stderr);
+			    mapi_explain_result(hdl, stdout);
 			    throw dut::syntax("e");
 			}
 			else if(mapi_error(dbh)==MTIMEOUT)
 			{
-				mapi_explain_result(hdl, stderr);
+				mapi_explain_result(hdl, stdout);
 				throw dut::timeout("t");
 			}
 			else
+			{
+				mapi_explain_result(hdl, stdout);
 				throw dut::failure("er");
+			}
 		} catch (dut::failure &e){
 			throw dut::failure("et");
 		}

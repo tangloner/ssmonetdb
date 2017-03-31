@@ -11,6 +11,8 @@
 #include "impedance.hh"
 #include "expr.hh"
 
+#define MONETDB
+
 using namespace std;
 using impedance::matched;
 
@@ -321,8 +323,10 @@ void atomic_subselect::out(std::ostream &out)
   
   out << " from " << tab->ident();
 
+#ifndef MONETDB
   if (!agg)
     out << " limit 1 offset " << offset;
+#endif 
 
   out << ")";
   indent(out);

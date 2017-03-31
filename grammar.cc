@@ -10,6 +10,8 @@
 #include "schema.hh"
 #include "impedance.hh"
 
+#define MONETDB
+
 using namespace std;
 
 shared_ptr<table_ref> table_ref::factory(prod *p) {
@@ -55,9 +57,15 @@ table_sample::table_sample(prod *p) : table_ref(p) {
 
 void table_sample::out(std::ostream &out) {
   out << t->ident() <<
+
+#ifdef MONETDB
+    " as " << refs[0]->ident();
+#else
     " as " << refs[0]->ident() <<
     " tablesample " << method <<
     " (" << percent << ") ";
+#endif
+
 }
 
 table_subquery::table_subquery(prod *p, bool lateral)
@@ -184,8 +192,8 @@ void select_list::out(std::ostream &out)
 }
 
 void query_spec::out(std::ostream &out) {
-  out << "select " << set_quantifier << " "
-      << *select_list;
+//  out << "select " << set_quantifier << " "
+  out << "select " << *select_list;
   indent(out);
   out << *from_clause;
   indent(out);
@@ -415,12 +423,13 @@ shared_ptr<prod> statement_factory(struct scope *s)
     s->new_stmt();
     if (d42() == 1)
       return make_shared<insert_stmt>((struct prod *)0, s);
-    else if (d42() == 1)
-      return make_shared<delete_returning>((struct prod *)0, s);
+//    else if (d42() == 1)
+//      return make_shared<delete_returning>((struct prod *)0, s);
     else if (d42() == 1) {
       return make_shared<upsert_stmt>((struct prod *)0, s);
-    } else if (d42() == 1)
-      return make_shared<update_returning>((struct prod *)0, s);
+    } 
+//	else if (d42() == 1)
+//      return make_shared<update_returning>((struct prod *)0, s);
     else if (d6() > 4)
       return make_shared<select_for_update>((struct prod *)0, s);
     else if (d6() > 5)
